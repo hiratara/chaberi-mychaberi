@@ -1,0 +1,13 @@
+This is a WEB interface of chaberi.
+
+It's a thing used for just myself and doesn't work well yet.
+(And my practice of constructing Tatsumaki applications :-p)
+
+*** CAUTION ***
+
+For security reasons, this repository DOESN'T contain core source of 
+AnyEvent::Chaberi which is used to communicate with chaberi servers. 
+
+If you really need these source, e-mail to me.
+
+hiratara
