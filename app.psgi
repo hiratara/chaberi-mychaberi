@@ -89,12 +89,12 @@ our $room = Chaberi::AnyEvent::Room->new(
 	on_member_leaving  => sub { warn "leaving ... " . $_[0]; },
 	on_unknown_command => sub { use Data::Dumper; warn Dumper $_[0]; },
 	on_said            => sub {
-		my ($id, $comment) = @_;
+		my ($member, $comment) = @_;
 		my $mq  = Tatsumaki::MessageQueue->instance( 'chaberi' );
 		# warn "said ... " . join ',', @_;
 		$mq->publish( {
 			type => 'message',
-			log  => $id . ':' . $comment,
+			log  => $member->{name} . ':' . $comment,
 		} );
 	},
 );
