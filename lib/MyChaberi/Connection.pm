@@ -73,17 +73,20 @@ sub BUILD {
 
 	$self->conn->on_said( sub {
 		my ($member, $comment) = @_;
-		my $mq  = Tatsumaki::MessageQueue->instance( 
-			'chaberi' . $self->channel
-		);
-		# warn "said ... " . join ',', @_;
-		$mq->publish( {
+		$self->mq->publish( {
 			type => 'message',
 			log  => $member->{name} . ':' . $comment,
 		} );
 	} );
 }
 
+
+sub mq {
+	my $self = shift;
+	return Tatsumaki::MessageQueue->instance( 
+			'chaberi' . $self->channel
+	);
+}
 
 __PACKAGE__->meta->make_immutable;
 no  Moose;
