@@ -1,10 +1,26 @@
+? my @channels = MyChaberi::Connection->channels;
 <html>
 <head>
 <title>MyChaberi</title>
 </head>
 <body>
 <form method="post" action="connect">
+
+Host: <input name="address" value="ch0.chaberi.com"><br />
+Port: <input name="port" value="6899"><br />
+Room: <input name="room" value="43"><br />
+Name: <input name="name" value="ゲスト39"><br />
+ID:   <input name="id" value="2626790"><br />
+Hash: <input name="hash" value="11eb725d6a4dfc5e31eb8f773e637bbf"><br />
+
 <input type="submit" value="入室">
 </form>
+
+<ul>
+? for my $chan (@channels) {
+<li><a href="<?= $chan ?>"><?= $chan ?></a></li>
+? }
+</ul>
+
 </body>
 </html>

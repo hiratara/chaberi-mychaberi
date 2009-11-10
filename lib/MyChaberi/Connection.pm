@@ -6,17 +6,26 @@ use Chaberi::AnyEvent::Room;
 has conn    => ( is => 'ro', isa => 'Chaberi::AnyEvent::Room', required => 1 );
 has channel => ( is => 'ro', isa => 'Int',                     required => 1 );
 
-my $instance;
+my %instance;
 sub instance {
 	my $class = shift;
-	return $instance or die 'No connections';
+	my ( $channel ) = @_;
+	return $instance{$channel} or die 'No connections';
 }
 
+my $channel = 0;
 sub connect {
 	my $class = shift;
-	die 'Already connected' if $instance;
 
-	$instance = $class->new( @_ );
+	my $chan = ++$channel;
+	$instance{ $chan } = $class->new( @_, channel => $chan, );
+
+	return $chan;
+}
+
+sub channels {
+	my $class = shift;
+	return sort keys %instance;
 }
 
 around BUILDARGS => sub {

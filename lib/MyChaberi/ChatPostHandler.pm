@@ -12,7 +12,7 @@ sub post {
 
     my $req = $self->request;
 
-    my $room = MyChaberi::Connection->instance->conn;
+    my $room = MyChaberi::Connection->instance( $channel )->conn;
     $room->say( $req->param( 'text' ) );
 
     $self->write({ success => 1 });
