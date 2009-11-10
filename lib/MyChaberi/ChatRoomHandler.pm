@@ -7,8 +7,10 @@ extends 'Tatsumaki::Handler';
 
 sub get {
     my $self = shift;
+    my ( $channel ) = @_;
 
     MyChaberi::Connection->connect(
+        channel => $channel,
         address => 'ch0.chaberi.com', 
         port    => '6899',
         room    => '9',

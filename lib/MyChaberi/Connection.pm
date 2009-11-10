@@ -3,7 +3,8 @@ use Moose;
 use Tatsumaki::MessageQueue;
 use Chaberi::AnyEvent::Room;
 
-has conn => ( is => 'rw', isa => 'Chaberi::AnyEvent::Room', required => 1 );
+has conn    => ( is => 'ro', isa => 'Chaberi::AnyEvent::Room', required => 1 );
+has channel => ( is => 'ro', isa => 'Int',                     required => 1 );
 
 my $instance;
 sub instance {
@@ -52,7 +53,10 @@ around BUILDARGS => sub {
 		on_unknown_command => sub { use Data::Dumper; warn Dumper $_[0]; },
 		on_said            => sub {
 			my ($member, $comment) = @_;
-			my $mq  = Tatsumaki::MessageQueue->instance( 'chaberi' );
+			my $mq  = Tatsumaki::MessageQueue->instance( 
+				# XXX Not good. Want to use accessors.
+				'chaberi' . $params{channel}  
+			);
 			# warn "said ... " . join ',', @_;
 			$mq->publish( {
 				type => 'message',
@@ -61,7 +65,7 @@ around BUILDARGS => sub {
 		},
 	);
 
-	return { conn => $conn, };
+	return { conn => $conn, %params };
 };
 
 

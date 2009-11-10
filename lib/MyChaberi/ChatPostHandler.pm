@@ -8,6 +8,8 @@ extends 'Tatsumaki::Handler';
 
 sub post {
     my $self = shift;
+    my ( $channel ) = @_;
+
     my $req = $self->request;
 
     my $room = MyChaberi::Connection->instance->conn;
