@@ -1,9 +1,10 @@
 jQuery( function ($) {
 
+var channel = $("[name=channel]").val();
 
 $("#say").click(function () {
     $.post( 
-        "/post", 
+        "/post/" + channel, 
         [{name: "text", value: $("[name=text]").val()}], 
         undefined,
         "JSON"
@@ -11,7 +12,7 @@ $("#say").click(function () {
 });
 
 
-$.ev.loop('/poll?session=' + Math.random(), {
+$.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
     message: function(ev) {
         $( "#logs" ).prepend( ev.log + "<br>" );
     }

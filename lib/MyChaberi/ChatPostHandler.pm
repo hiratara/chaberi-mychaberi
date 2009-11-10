@@ -7,9 +7,11 @@ extends 'Tatsumaki::Handler';
 
 sub post {
     my $self = shift;
+    my ( $channel ) = @_;
+
     my $req = $self->request;
 
-    my $room = MyChaberi::Connection->instance->conn;
+    my $room = MyChaberi::Connection->instance( $channel )->conn;
     $room->say( $req->param( 'text' ) );
 
     $self->write({ success => 1 });

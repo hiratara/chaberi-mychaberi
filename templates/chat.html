@@ -1,3 +1,4 @@
+? my $channel = $_[0]->{handler}->args->[0];
 <html>
 <head>
 <title>TEST</title>
@@ -6,6 +7,7 @@
 <script type="text/javascript" src="static/ajax.js"></script>
 </head>
 <body>
+<input type="hidden" name="channel" value="<?= $channel ?>">
 <input type="text" name="text">
 <input type="button" id="say" value="発言">
 
