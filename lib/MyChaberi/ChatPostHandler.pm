@@ -1,16 +1,15 @@
 package MyChaberi::ChatPostHandler;
 use Moose;
 use utf8;
+use MyChaberi::Connection;
 
 extends 'Tatsumaki::Handler';
-
-# XXX Hmm, "room" should be managed by some singleton manager classes.
-our $room = undef;
 
 sub post {
     my $self = shift;
     my $req = $self->request;
 
+    my $room = MyChaberi::Connection->instance->conn;
     $room->say( $req->param( 'text' ) );
 
     $self->write({ success => 1 });
