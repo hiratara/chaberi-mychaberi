@@ -1,7 +1,6 @@
 package MyChaberi::ChatPostHandler;
 use Moose;
 use utf8;
-use HTML::Entities;
 
 extends 'Tatsumaki::Handler';
 
