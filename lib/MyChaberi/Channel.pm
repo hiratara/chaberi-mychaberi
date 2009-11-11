@@ -57,9 +57,6 @@ around BUILDARGS => sub {
 		},
 		on_disconnect      => sub { warn "disconnected!"; },
 		on_error           => sub { warn @_; },
-		on_enter           => sub { warn "entered ... " . join ',', @_; },
-		on_member_entered  => sub { warn "entered ... " . $_[0]; },
-		on_member_leaving  => sub { warn "leaving ... " . $_[0]; },
 		on_unknown_command => sub { use Data::Dumper; warn Dumper $_[0]; },
 	);
 
