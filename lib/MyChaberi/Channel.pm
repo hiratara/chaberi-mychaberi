@@ -96,7 +96,8 @@ sub BUILD {
 
 	$self->conn->on_error( sub { 
 		my $conn = shift;
-		$self->mq->publish( { type => 'error', messages => \@_, } );
+		my @messages = @_;
+		$self->mq->publish( { type => 'error', messages => \@messages, } );
 	} );
 }
 
