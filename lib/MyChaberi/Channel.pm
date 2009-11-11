@@ -55,8 +55,6 @@ around BUILDARGS => sub {
 				hash => $hash,
 			);
 		},
-		on_disconnect      => sub { warn "disconnected!"; },
-		on_error           => sub { warn @_; },
 		on_unknown_command => sub { use Data::Dumper; warn Dumper $_[0]; },
 	);
 
@@ -89,6 +87,15 @@ sub BUILD {
 	$define_event->('member_facechanged', [qw(member face oldface)]);
 	$define_event->('member_leaving'    , [qw(member)]);
 	$define_event->('member_kicked'     , [qw(member kicker)]);
+
+	$self->conn->on_disconnect( sub { 
+		$self->mq->publish( { type => 'disconnect', } );
+		delete $instance{ $self->channel };
+	} );
+
+	$self->conn->on_error( sub { 
+		$self->mq->publish( { type => 'error', messages => \@_, } );
+	} );
 }
 
 

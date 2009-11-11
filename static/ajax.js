@@ -5,6 +5,11 @@ function sysMessage(message) {
 }
 
 
+function errMessage(message) {
+    return '<div style="color: #F00">' + message + '</div>';
+}
+
+
 function member(member){
     return member.name + '(' + member.id + ')';
 }
@@ -87,6 +92,16 @@ $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
         $( "#logs" ).prepend( sysMessage(
             'オーナー変更: ' + member( ev.owner ) + '→' + member( ev.oldowner )
         ) );
+    },
+
+    error: function(ev) {
+        $( "#logs" ).prepend( errMessage( 
+            "エラー: " + ev.messages.join(",") 
+        ) );
+    },
+
+    disconnect: function(ev) {
+        $( "#logs" ).prepend( errMessage( "切断" ) );
     }
 });
 
