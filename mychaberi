@@ -1,0 +1,2 @@
+#!/bin/sh
+exec plackup -I../Plack/lib -I../ae_chaberi/lib -Ilib -I../Tatsumaki/lib -I../Plack-Server-AnyEvent/lib --server AnyEvent
