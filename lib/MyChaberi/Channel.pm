@@ -11,7 +11,7 @@ my %instance;
 sub instance {
 	my $class = shift;
 	my ( $channel ) = @_;
-	return $instance{$channel} or die 'No connections';
+	return $instance{$channel} || die 'No connections';
 }
 
 my $channel = 0;
