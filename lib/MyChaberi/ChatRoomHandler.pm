@@ -1,15 +1,24 @@
 package MyChaberi::ChatRoomHandler;
 use Moose;
 use utf8;
+use Try::Tiny;
 use MyChaberi::Channel;
 
 extends 'Tatsumaki::Handler';
+with 'MyChaberi::Role::AbsoluteURL';
 
 sub get {
     my $self = shift;
     my ( $channel ) = @_;
 
-    $self->render( 'chat.html' );
+    try {
+        my $chan = MyChaberi::Channel->instance( $channel ) or die;
+        $self->render( 'chat.html' );
+    } catch {
+        qr/no connections/i or die;
+        $self->response->redirect( $self->abs_url( '..' ) );
+    };
+
 }
 
 __PACKAGE__->meta->make_immutable;
