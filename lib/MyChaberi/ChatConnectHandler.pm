@@ -9,7 +9,7 @@ sub post {
 	my $req  = $self->request;
 	my $res  = $self->response;
 
-	my $channel = MyChaberi::Connection->connect(
+	my $channel = MyChaberi::Channel->connect(
 		map {
 			$_ => scalar $req->param( $_ ) 
 		} qw/address port room name id hash/,

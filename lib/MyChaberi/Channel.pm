@@ -1,7 +1,8 @@
-package MyChaberi::Connection;
+package MyChaberi::Channel;
 use Moose;
 use Tatsumaki::MessageQueue;
 use Chaberi::AnyEvent::Room;
+use Scalar::Util;
 
 has conn    => ( is => 'ro', isa => 'Chaberi::AnyEvent::Room', required => 1 );
 has channel => ( is => 'ro', isa => 'Int',                     required => 1 );
@@ -60,23 +61,32 @@ around BUILDARGS => sub {
 		on_member_entered  => sub { warn "entered ... " . $_[0]; },
 		on_member_leaving  => sub { warn "leaving ... " . $_[0]; },
 		on_unknown_command => sub { use Data::Dumper; warn Dumper $_[0]; },
-		on_said            => sub {
-			my ($member, $comment) = @_;
-			my $mq  = Tatsumaki::MessageQueue->instance( 
-				# XXX Not good. Want to use accessors.
-				'chaberi' . $params{channel}  
-			);
-			# warn "said ... " . join ',', @_;
-			$mq->publish( {
-				type => 'message',
-				log  => $member->{name} . ':' . $comment,
-			} );
-		},
+#		on_said            => sub {},
 	);
 
 	return { conn => $conn, %params };
 };
 
+
+sub BUILD {
+	Scalar::Util::weaken ( my $self = shift ); 
+
+	$self->conn->on_said( sub {
+		my ($member, $comment) = @_;
+		$self->mq->publish( {
+			type => 'message',
+			log  => $member->{name} . ':' . $comment,
+		} );
+	} );
+}
+
+
+sub mq {
+	my $self = shift;
+	return Tatsumaki::MessageQueue->instance( 
+			'chaberi' . $self->channel
+	);
+}
 
 __PACKAGE__->meta->make_immutable;
 no  Moose;
