@@ -1,3 +1,16 @@
+( function ($) {
+
+function sysMessage(message) {
+    return '<div style="color: #999">' + message + '</div>';
+}
+
+
+function member(member){
+    return member.name + '(' + member.id + ')';
+}
+
+
+// Entry point
 jQuery( function ($) {
 
 var channel = $("[name=channel]").val();
@@ -16,12 +29,63 @@ $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
     said: function(ev) {
         $( "#logs" ).prepend(
             '<div style="color: ' + ev.color + '">' +
-            ev.member.name + '(size=' + ev.size + ')<br>' +
+            member( ev.member ) + '(size=' + ev.size + ')<br>' +
             ev.comment + 
             '</div>'
         );
+    },
+
+    enter: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            '入室した。sock: ' + ev.sockid + ', chatid: ' + ev.chatid + 
+            ', hash: ' + ev.hash
+        ) );
+    },
+
+    member_entered: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            member( ev.member ) + 'が入室した。'
+        ) );
+    },
+
+    member_leaving: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            member( ev.member ) + 'が去った。'
+        ) );
+    },
+
+    member_kicked: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            member( ev.member ) + 'が' + member( ev.kicker ) + 'に蹴られた。'
+        ) );
+    }, 
+
+    member_statchanged: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            member( ev.member ) + 'の状態変更: ' + ev.stat + '→' + ev.oldstat
+        ) );
+    }, 
+
+    member_namechanged: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            member( ev.member ) + 'の名前変更: ' + ev.name + '→' + ev.oldname
+        ) );
+    }, 
+
+    member_facechanged: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            member( ev.member ) + 'の表情変更: ' + ev.face + '→' + ev.oldface
+        ) );
+    },
+
+    owner_changed: function(ev) {
+        $( "#logs" ).prepend( sysMessage(
+            'オーナー変更: ' + member( ev.owner ) + '→' + member( ev.oldowner )
+        ) );
     }
 });
 
 
 } );
+
+} )(jQuery);

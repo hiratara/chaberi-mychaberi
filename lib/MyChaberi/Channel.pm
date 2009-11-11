@@ -70,23 +70,28 @@ around BUILDARGS => sub {
 sub BUILD {
 	Scalar::Util::weaken ( my $self = shift ); 
 
-	my $push = sub {
-		my ( $type, $json ) = @_;
+	my $define_event = sub {
+		my ( $type, $param_names ) = @_;
 
-		$json->{type} = $type unless exists $json->{type};
+		grep {$_ eq 'type'} @$param_names and die;
 
-		$self->mq->publish( $json );
+		my $hook = "on_$type";
+		$self->conn->$hook( sub {
+			my %json; @json{ 'type', @$param_names } = ( $type, @_ );
+			$self->mq->publish( \%json );
+		} );
 	};
 
-	$self->conn->on_said( sub {
-		my ($member, $comment, $color, $size) = @_;
-		$push->( 'said', {
-			member  => $member,
-			comment => $comment,
-			color   => $color,
-			size    => $size,
-		} );
-	} );
+	# Event definitions
+	$define_event->('said'              , [qw(member comment color size)]);
+	$define_event->('enter'             , [qw(sockid chatid hash)]);
+	$define_event->('member_entered'    , [qw(member)]);
+	$define_event->('member_statchanged', [qw(member stat oldstat)]);
+	$define_event->('member_namechanged', [qw(member name oldname)]);
+	$define_event->('owner_changed'     , [qw(owner oldowner)]);
+	$define_event->('member_facechanged', [qw(member face oldface)]);
+	$define_event->('member_leaving'    , [qw(member)]);
+	$define_event->('member_kicked'     , [qw(member kicker)]);
 }
 
 
