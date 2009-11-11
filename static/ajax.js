@@ -15,15 +15,20 @@ jQuery( function ($) {
 
 var channel = $("[name=channel]").val();
 
-$("#say").click(function () {
+function say() {
     $.post( 
         "/post/" + channel, 
         [{name: "text", value: $("[name=text]").val()}], 
         undefined,
         "JSON"
     );
-});
+    $("[name=text]").val( "" );
+}
 
+$("#say").click(say);
+$("#text").keypress( function (ev) {
+    if(ev.keyCode == 13) say();
+} );
 
 $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
     said: function(ev) {
