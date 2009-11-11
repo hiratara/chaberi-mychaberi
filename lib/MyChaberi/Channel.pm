@@ -1,4 +1,4 @@
-package MyChaberi::Connection;
+package MyChaberi::Channel;
 use Moose;
 use Tatsumaki::MessageQueue;
 use Chaberi::AnyEvent::Room;

@@ -2,7 +2,7 @@ package MyChaberi::ChatPostHandler;
 use Moose;
 use utf8;
 use HTML::Entities;
-use MyChaberi::Connection;
+use MyChaberi::Channel;
 
 extends 'Tatsumaki::Handler';
 
@@ -12,7 +12,7 @@ sub post {
 
     my $req = $self->request;
 
-    my $room = MyChaberi::Connection->instance( $channel )->conn;
+    my $room = MyChaberi::Channel->instance( $channel )->conn;
     $room->say( $req->param( 'text' ) );
 
     $self->write({ success => 1 });

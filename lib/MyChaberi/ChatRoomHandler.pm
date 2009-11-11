@@ -1,7 +1,7 @@
 package MyChaberi::ChatRoomHandler;
 use Moose;
 use utf8;
-use MyChaberi::Connection;
+use MyChaberi::Channel;
 
 extends 'Tatsumaki::Handler';
 
