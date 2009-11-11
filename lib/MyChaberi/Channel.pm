@@ -6,6 +6,7 @@ use Scalar::Util;
 
 has conn    => ( is => 'ro', isa => 'Chaberi::AnyEvent::Room', required => 1 );
 has channel => ( is => 'ro', isa => 'Int',                     required => 1 );
+has on_ready => ( is => 'ro', isa => 'CodeRef', required => 1);
 
 my %instance;
 sub instance {
@@ -17,11 +18,10 @@ sub instance {
 my $channel = 0;
 sub connect {
 	my $class = shift;
+	my $cb    = pop;
 
 	my $chan = ++$channel;
-	$instance{ $chan } = $class->new( @_, channel => $chan, );
-
-	return $chan;
+	$instance{ $chan } = $class->new( @_, channel => $chan, on_ready => $cb );
 }
 
 sub channels {
@@ -99,6 +99,16 @@ sub BUILD {
 		my @messages = @_;
 		$self->mq->publish( { type => 'error', messages => \@messages, } );
 	} );
+
+	# on_ready notification
+	{
+		my $orig = $self->conn->on_enter;
+		$self->conn->on_enter( sub {
+			$self->on_ready->( $self );
+			$orig->( @_ );
+		} );
+	}
+
 }
 
 

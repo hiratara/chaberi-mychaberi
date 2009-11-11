@@ -4,18 +4,22 @@ use Moose;
 extends 'Tatsumaki::Handler';
 with 'MyChaberi::Role::AbsoluteURL';
 
+__PACKAGE__->asynchronous(1);
+
 sub post {
 	my $self = shift;
 	my $req  = $self->request;
-	my $res  = $self->response;
 
-	my $channel = MyChaberi::Channel->connect(
-		map {
+	MyChaberi::Channel->connect(
+		( map {
 			$_ => scalar $req->param( $_ ) 
-		} qw/address port room name id hash/,
+		} qw/address port room name id hash/ ),
+		sub {
+			my $chan = shift;
+			$self->response->redirect( $self->abs_url( $chan->channel ) );
+			$self->finish;
+		},
 	);
-
-	$res->redirect( $self->abs_url( $channel ) );
 }
 
 __PACKAGE__->meta->make_immutable;
