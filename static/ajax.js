@@ -13,8 +13,13 @@ $("#say").click(function () {
 
 
 $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
-    message: function(ev) {
-        $( "#logs" ).prepend( ev.log + "<br>" );
+    said: function(ev) {
+        $( "#logs" ).prepend(
+            '<div style="color: ' + ev.color + '">' +
+            ev.member.name + '(size=' + ev.size + ')<br>' +
+            ev.comment + 
+            '</div>'
+        );
     }
 });
 

@@ -61,7 +61,6 @@ around BUILDARGS => sub {
 		on_member_entered  => sub { warn "entered ... " . $_[0]; },
 		on_member_leaving  => sub { warn "leaving ... " . $_[0]; },
 		on_unknown_command => sub { use Data::Dumper; warn Dumper $_[0]; },
-#		on_said            => sub {},
 	);
 
 	return { conn => $conn, %params };
@@ -71,11 +70,21 @@ around BUILDARGS => sub {
 sub BUILD {
 	Scalar::Util::weaken ( my $self = shift ); 
 
+	my $push = sub {
+		my ( $type, $json ) = @_;
+
+		$json->{type} = $type unless exists $json->{type};
+
+		$self->mq->publish( $json );
+	};
+
 	$self->conn->on_said( sub {
-		my ($member, $comment) = @_;
-		$self->mq->publish( {
-			type => 'message',
-			log  => $member->{name} . ':' . $comment,
+		my ($member, $comment, $color, $size) = @_;
+		$push->( 'said', {
+			member  => $member,
+			comment => $comment,
+			color   => $color,
+			size    => $size,
 		} );
 	} );
 }
