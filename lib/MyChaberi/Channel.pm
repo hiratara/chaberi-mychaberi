@@ -89,11 +89,13 @@ sub BUILD {
 	$define_event->('member_kicked'     , [qw(member kicker)]);
 
 	$self->conn->on_disconnect( sub { 
+		my $conn = shift;
 		$self->mq->publish( { type => 'disconnect', } );
 		delete $instance{ $self->channel };
 	} );
 
 	$self->conn->on_error( sub { 
+		my $conn = shift;
 		$self->mq->publish( { type => 'error', messages => \@_, } );
 	} );
 }
