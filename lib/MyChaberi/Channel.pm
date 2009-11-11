@@ -109,6 +109,16 @@ sub mq {
 	);
 }
 
+
+sub close {
+	my $self = shift;
+	$self->conn->shutdown;
+	delete $instance{ $self->channel };
+
+	# XXX Should I forbid to call another method after this ?
+}
+
+
 __PACKAGE__->meta->make_immutable;
 no  Moose;
 1;

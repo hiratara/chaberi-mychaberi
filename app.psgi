@@ -7,17 +7,19 @@ use File::Basename;
 use MyChaberi::Application;
 use MyChaberi::ChatIndexHandler;
 use MyChaberi::ChatConnectHandler;
+use MyChaberi::ChatDisconnectHandler;
 use MyChaberi::ChatRoomHandler;
 use MyChaberi::ChatPollHandler;
 use MyChaberi::ChatPostHandler;
 
 my $chan_reg = '[1-9]\d*';
 my $app = MyChaberi::Application->new( [
-	"/poll/($chan_reg)" => 'MyChaberi::ChatPollHandler',
-	"/post/($chan_reg)" => 'MyChaberi::ChatPostHandler',
-	"/connect"          => 'MyChaberi::ChatConnectHandler',
-	"/($chan_reg)"      => 'MyChaberi::ChatRoomHandler',
-	"/"                 => 'MyChaberi::ChatIndexHandler',
+	"/poll/($chan_reg)"       => 'MyChaberi::ChatPollHandler',
+	"/post/($chan_reg)"       => 'MyChaberi::ChatPostHandler',
+	"/disconnect/($chan_reg)" => 'MyChaberi::ChatDisconnectHandler',
+	"/connect"                => 'MyChaberi::ChatConnectHandler',
+	"/($chan_reg)"            => 'MyChaberi::ChatRoomHandler',
+	"/"                       => 'MyChaberi::ChatIndexHandler',
 ] );
 
 $app->template_path( (dirname __FILE__) . "/templates");
