@@ -25,7 +25,7 @@ function say() {
         "/post/" + channel, 
         [{name: "text", value: $("[name=text]").val()}], 
         undefined,
-        "JSON"
+        "json"
     );
     $("[name=text]").val( "" );
 }
