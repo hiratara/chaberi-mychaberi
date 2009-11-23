@@ -105,6 +105,21 @@ $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
     }
 });
 
+// Polling to refresh member list (It's work well though it's too bad.)
+setInterval( function () { $.post(
+    "/members/" + channel, 
+    "", 
+    function ( members ) {
+        var htmls = [];
+        for( var i = 0; i < members.length; i++ ){
+            var m = members[i];
+            htmls.push( m.name );
+        }
+
+        $( "#members" ).html( htmls.join("、") );
+    },
+    "json"
+); }, 1000 );
 
 } );
 
