@@ -72,25 +72,25 @@ $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
 
     member_statchanged: function(ev) {
         $( "#logs" ).prepend( sysMessage(
-            member( ev.member ) + 'の状態変更: ' + ev.stat + '→' + ev.oldstat
+            member( ev.member ) + 'の状態変更: ' + ev.oldstat + '→' + ev.stat
         ) );
     }, 
 
     member_namechanged: function(ev) {
         $( "#logs" ).prepend( sysMessage(
-            member( ev.member ) + 'の名前変更: ' + ev.name + '→' + ev.oldname
+            member( ev.member ) + 'の名前変更: ' + ev.oldname + '→' + ev.name
         ) );
     }, 
 
     member_facechanged: function(ev) {
         $( "#logs" ).prepend( sysMessage(
-            member( ev.member ) + 'の表情変更: ' + ev.face + '→' + ev.oldface
+            member( ev.member ) + 'の表情変更: ' + ev.oldface + '→' + ev.face
         ) );
     },
 
     owner_changed: function(ev) {
         $( "#logs" ).prepend( sysMessage(
-            'オーナー変更: ' + member( ev.owner ) + '→' + member( ev.oldowner )
+            'オーナー変更: ' + member( ev.oldowner ) + '→' + member( ev.owner )
         ) );
     },
 
