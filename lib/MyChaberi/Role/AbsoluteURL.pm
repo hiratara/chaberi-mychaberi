@@ -1,5 +1,5 @@
 package MyChaberi::Role::AbsoluteURL;
-use Moose::Role;
+use Any::Moose '::Role';
 use URI;
 
 requires 'request';
@@ -12,5 +12,5 @@ sub abs_url {
 	return URI->new_abs( $rel_url, $req->uri )->as_string;
 }
 
-no  Moose::Role;
+no  Any::Moose '::Role';
 1;

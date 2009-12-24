@@ -1,5 +1,5 @@
 package MyChaberi::ChatRoomHandler;
-use Moose;
+use Any::Moose;
 use utf8;
 use Try::Tiny;
 use MyChaberi::Channel;
@@ -22,7 +22,7 @@ sub get {
 }
 
 __PACKAGE__->meta->make_immutable;
-no  Moose;
+no  Any::Moose;
 
 1;
 

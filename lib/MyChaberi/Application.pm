@@ -1,5 +1,5 @@
 package MyChaberi::Application;
-use Moose;
+use Any::Moose;
 
 extends 'Tatsumaki::Application';
 
@@ -15,5 +15,5 @@ sub BUILD {
 }
 
 __PACKAGE__->meta->make_immutable;
-no  Moose;
+no  Any::Moose;
 1;

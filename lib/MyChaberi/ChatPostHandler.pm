@@ -1,5 +1,5 @@
 package MyChaberi::ChatPostHandler;
-use Moose;
+use Any::Moose;
 use utf8;
 use MyChaberi::Channel;
 
@@ -29,6 +29,6 @@ sub post {
 }
 
 __PACKAGE__->meta->make_immutable;
-no  Moose;
+no  Any::Moose;
 
 1;

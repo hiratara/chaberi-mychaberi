@@ -1,5 +1,5 @@
 package MyChaberi::ChatConnectHandler;
-use Moose;
+use Any::Moose;
 
 extends 'Tatsumaki::Handler';
 with 'MyChaberi::Role::AbsoluteURL';
@@ -19,6 +19,6 @@ sub post {
 }
 
 __PACKAGE__->meta->make_immutable;
-no  Moose;
+no  Any::Moose;
 
 1;

@@ -1,5 +1,5 @@
 package MyChaberi::Channel;
-use Moose;
+use Any::Moose;
 use Tatsumaki::MessageQueue;
 use Chaberi::AnyEvent::Room;
 use Scalar::Util;
@@ -120,5 +120,5 @@ sub close {
 
 
 __PACKAGE__->meta->make_immutable;
-no  Moose;
+no  Any::Moose;
 1;
