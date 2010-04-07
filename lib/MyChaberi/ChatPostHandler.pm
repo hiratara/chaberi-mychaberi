@@ -1,6 +1,7 @@
 package MyChaberi::ChatPostHandler;
 use Any::Moose;
 use utf8;
+use Encode;
 use MyChaberi::Channel;
 
 extends 'Tatsumaki::Handler';
@@ -9,7 +10,7 @@ sub post {
     my $self = shift;
     my ( $channel ) = @_;
 
-    my $comment = $self->request->param( 'text' );
+    my $comment = decode_utf8 $self->request->param( 'text' );
 
     # Send to chaberi server.
     my $chan = MyChaberi::Channel->instance( $channel );

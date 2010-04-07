@@ -1,5 +1,6 @@
 package MyChaberi::ChatConnectHandler;
 use Any::Moose;
+use Encode;
 
 extends 'Tatsumaki::Handler';
 with 'MyChaberi::Role::AbsoluteURL';
@@ -11,7 +12,7 @@ sub post {
 
 	my $channel = MyChaberi::Channel->connect(
 		map {
-			$_ => scalar $req->param( $_ ) 
+			$_ => decode_utf8 scalar $req->param( $_ ) 
 		} qw/address port room name id hash/,
 	);
 
