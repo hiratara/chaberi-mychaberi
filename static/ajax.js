@@ -22,7 +22,7 @@ var channel = $("[name=channel]").val();
 
 function say() {
     $.post( 
-        "/post/" + channel, 
+        "post/" + channel, 
         [{name: "text", value: $("[name=text]").val()}], 
         undefined,
         "json"
@@ -35,7 +35,7 @@ $("#text").keypress( function (ev) {
     if(ev.keyCode == 13) say();
 } );
 
-$.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
+$.ev.loop("poll/" + channel + "?session=" + Math.random(), {
     said: function(ev) {
         $( "#logs" ).prepend(
             '<div style="color: ' + ev.color + '">' +
@@ -107,7 +107,7 @@ $.ev.loop("/poll/" + channel + "?session=" + Math.random(), {
 
 // Polling to refresh member list (It's work well though it's too bad.)
 setInterval( function () { $.post(
-    "/members/" + channel, 
+    "members/" + channel, 
     "", 
     function ( members ) {
         var htmls = [];
