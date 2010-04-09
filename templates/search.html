@@ -1,0 +1,29 @@
+? use URI::Escape;
+? my $rooms = $_[0]->{rooms};
+? my @channels = MyChaberi::Channel->channels;
+<html>
+<head>
+<title>SEARCH</title>
+</head>
+<body>
+<h1>Logining...</h1>
+<ul>
+? for my $chan (@channels) {
+<li><a href="<?= $chan ?>"><?= $chan ?></a></li>
+? }
+</ul>
+
+<h1>Other Rooms...</h1>
+? for my $r ( @$rooms ) {
+  <a href="entrance/<?= uri_escape_utf8($r->{url}) ?>">
+  <?= $r->{name} ?>
+  </a><br />
+  <? if( $r->{ad} ){ ?> "<?= $r->{ad} ?>"<br/> <? } ?>
+  <? for my $m ( @{$r->{members}} ){ ?> <?= $m->{name} ?>　 <? } ?>
+  <? if( @{$r->{members}} ){ ?> <br /> <? } ?>
+? }
+
+? # use Data::Dumper;
+<?# Dumper $rooms ?>
+</body>
+</html>

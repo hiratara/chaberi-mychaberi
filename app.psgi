@@ -4,7 +4,9 @@ use utf8;
 
 use File::Basename;
 
+use MyChaberi::Config;
 use MyChaberi::Application;
+use MyChaberi::ChatSearchHandler;
 use MyChaberi::ChatEntranceHandler;
 use MyChaberi::ChatConnectHandler;
 use MyChaberi::ChatDisconnectHandler;
@@ -21,10 +23,12 @@ my $app = MyChaberi::Application->new( [
 	"/disconnect/($chan_reg)" => 'MyChaberi::ChatDisconnectHandler',
 	"/connect"                => 'MyChaberi::ChatConnectHandler',
 	"/($chan_reg)"            => 'MyChaberi::ChatRoomHandler',
-	"/"                       => 'MyChaberi::ChatEntranceHandler',
+	"/entrance/(.*)"          => 'MyChaberi::ChatEntranceHandler',
+	"/"                       => 'MyChaberi::ChatSearchHandler',
 ] );
 
 $app->template_path( (dirname __FILE__) . "/templates");
 $app->static_path( (dirname __FILE__) . "/static");
+MyChaberi::Config->load( (dirname __FILE__) . "/config.yaml" );
 
 $app;

@@ -1,12 +1,12 @@
-? my @channels = MyChaberi::Channel->channels;
+? my $url = $_[0]->{handler}->args->[0];
 <html>
 <head>
 <title>MyChaberi</title>
 </head>
 <body>
-<form method="post" action="connect">
+<form method="post" action="../connect">
 
-URL: <input name="url" value="http://ch0.chaberi.com/chat/blue/43"><br/>
+URL: <input name="url" value="<?= $url || 'http://ch0.chaberi.com/chat/blue/43' ?>"><br/>
 Name: <input name="name" value="ゲスト39"><br />
 ID:   <input name="id" value="2626790"><br />
 Hash: <input name="hash" value="11eb725d6a4dfc5e31eb8f773e637bbf"><br />
@@ -14,11 +14,6 @@ Hash: <input name="hash" value="11eb725d6a4dfc5e31eb8f773e637bbf"><br />
 <input type="submit" value="入室">
 </form>
 
-<ul>
-? for my $chan (@channels) {
-<li><a href="<?= $chan ?>"><?= $chan ?></a></li>
-? }
-</ul>
-
+<a href="..">BACK</a>
 </body>
 </html>
