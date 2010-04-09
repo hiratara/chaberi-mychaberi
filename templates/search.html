@@ -1,11 +1,17 @@
 ? use URI::Escape;
 ? my $rooms = $_[0]->{rooms};
 ? my @channels = MyChaberi::Channel->channels;
+? my $q = Encode::decode_utf8 $_[0]->{handler}->request->param( 'q' );
 <html>
 <head>
 <title>SEARCH</title>
 </head>
 <body>
+<form method="GET" action=".">
+<input name="q" value="<?= $q ?>">
+<input type="submit">
+</form>
+
 <h1>Logining...</h1>
 <ul>
 ? for my $chan (@channels) {
