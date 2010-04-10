@@ -21,7 +21,7 @@
 
 <h1>Other Rooms...</h1>
 ? for my $r ( @$rooms ) {
-  <a href="entrance/<?= uri_escape_utf8($r->{url}) ?>">
+  <a href="entrance/?url=<?= uri_escape_utf8($r->{url}) ?>">
   <?= $r->{name} ?>
   </a><br />
   <? if( $r->{ad} ){ ?> "<?= $r->{ad} ?>"<br/> <? } ?>
