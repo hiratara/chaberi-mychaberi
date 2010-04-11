@@ -30,6 +30,21 @@ function say() {
     $("[name=text]").val( "" );
 }
 
+function refreshMemberList() { $.post(
+    "members/" + channel, 
+    "", 
+    function ( members ) {
+        var htmls = [];
+        for( var i = 0; i < members.length; i++ ){
+            var m = members[i];
+            htmls.push( m.name );
+        }
+
+        $( "#members" ).html( htmls.join("、") );
+    },
+    "json"
+); }
+
 $("#say").click(say);
 $("#text").keypress( function (ev) {
     if(ev.keyCode == 13) say();
@@ -50,24 +65,28 @@ $.ev.loop("poll/" + channel + "?session=" + Math.random(), {
             '入室した。sock: ' + ev.sockid + ', chatid: ' + ev.chatid + 
             ', hash: ' + ev.hash
         ) );
+        refreshMemberList();
     },
 
     member_entered: function(ev) {
         $( "#logs" ).prepend( sysMessage(
             member( ev.member ) + 'が入室した。'
         ) );
+        refreshMemberList();
     },
 
     member_leaving: function(ev) {
         $( "#logs" ).prepend( sysMessage(
             member( ev.member ) + 'が去った。'
         ) );
+        refreshMemberList();
     },
 
     member_kicked: function(ev) {
         $( "#logs" ).prepend( sysMessage(
             member( ev.member ) + 'が' + member( ev.kicker ) + 'に蹴られた。'
         ) );
+        refreshMemberList();
     }, 
 
     member_statchanged: function(ev) {
@@ -109,21 +128,8 @@ $.ev.loop("poll/" + channel + "?session=" + Math.random(), {
     }
 });
 
-// Polling to refresh member list (It's work well though it's too bad.)
-setInterval( function () { $.post(
-    "members/" + channel, 
-    "", 
-    function ( members ) {
-        var htmls = [];
-        for( var i = 0; i < members.length; i++ ){
-            var m = members[i];
-            htmls.push( m.name );
-        }
-
-        $( "#members" ).html( htmls.join("、") );
-    },
-    "json"
-); }, 1000 );
+//Initialize the member list.
+refreshMemberList();
 
 } );
 
