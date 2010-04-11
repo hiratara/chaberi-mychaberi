@@ -1,5 +1,6 @@
 package MyChaberi::Channel;
 use Any::Moose;
+use Encode;
 use Tatsumaki::MessageQueue;
 use Chaberi::AnyEvent::Room;
 use Scalar::Util;
@@ -87,6 +88,23 @@ sub BUILD {
 	$define_event->('member_facechanged', [qw(member face oldface)]);
 	$define_event->('member_leaving'    , [qw(member)]);
 	$define_event->('member_kicked'     , [qw(member kicker)]);
+
+	# Unknown tag
+	$self->conn->on_unknown_command( sub {
+		my $data = shift;
+
+		# Drop utf-8 flags
+		if( my ($attrs) = (values %$data) ){
+			$_ = encode_utf8 $_ for values %$attrs;
+		}
+
+		require Data::Dumper;
+		local $Data::Dumper::Indent = 0;
+		$self->mq->publish({
+			type => 'unknwon_command', 
+			data => decode_utf8 Data::Dumper::Dumper( $data ),
+		});
+	} );
 
 	$self->conn->on_disconnect( sub { 
 		my $conn = shift;

@@ -100,6 +100,10 @@ $.ev.loop("poll/" + channel + "?session=" + Math.random(), {
         ) );
     },
 
+    unknwon_command: function(ev) {
+        $( "#logs" ).prepend( errMessage( "不明なタグ: " + ev.data ) );
+    },
+
     disconnect: function(ev) {
         $( "#logs" ).prepend( errMessage( "切断" ) );
     }
