@@ -17,7 +17,7 @@ sub get {
 	} );
 
 	my $query = do{
-		my $q = decode_utf8 $self->request->param( 'q' );
+		my $q = decode_utf8 $self->request->param( 'q' ) || '';
 		qr/\Q$q\E/;
 	};
 
