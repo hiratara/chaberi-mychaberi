@@ -11,7 +11,11 @@ sub post {
 
     my $chan = MyChaberi::Channel->instance( $channel );
 
-    $self->write( [ values %{ $chan->conn->members } ] );
+    if($chan && $chan->conn){
+        $self->write( [ values %{ $chan->conn->members } ] );
+    }else{
+        $self->write( [] );
+    }
 }
 
 __PACKAGE__->meta->make_immutable;
