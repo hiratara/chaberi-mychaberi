@@ -5,7 +5,9 @@ use Tatsumaki::MessageQueue;
 use Chaberi::AnyEvent::Room;
 use Scalar::Util;
 
-has conn    => ( is => 'ro', isa => 'Chaberi::AnyEvent::Room', required => 1 );
+has conn    => ( 
+	is => 'rw', isa => 'Maybe[Chaberi::AnyEvent::Room]', required => 1
+);
 has channel => ( is => 'ro', isa => 'Int',                     required => 1 );
 
 my %instance;
@@ -64,7 +66,7 @@ around BUILDARGS => sub {
 
 
 sub BUILD {
-	Scalar::Util::weaken ( my $self = shift ); 
+	my $self = shift; 
 
 	my $define_event = sub {
 		my ( $type, $param_names ) = @_;
@@ -109,7 +111,8 @@ sub BUILD {
 	$self->conn->on_disconnect( sub { 
 		my $conn = shift;
 		$self->mq->publish( { type => 'disconnect', } );
-		delete $instance{ $self->channel };
+		$self->conn(undef);
+		undef $self;  # break cyclic reference
 	} );
 
 	$self->conn->on_error( sub { 
@@ -129,8 +132,9 @@ sub mq {
 
 sub close {
 	my $self = shift;
-	$self->conn->shutdown;
+
 	delete $instance{ $self->channel };
+	$self->conn->shutdown if $self->conn;
 
 	# XXX Should I forbid to call another method after this ?
 }
